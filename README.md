@@ -13,7 +13,7 @@
 <p>
 <h2>Requirements:</h2>
 <ul>
-<li> nhastie requires Java <u>1.7.x</u></li>
+<li> NHASTIE requires Java <u>1.7.x</u></li>
 </ul>
 </p>
 
@@ -21,10 +21,10 @@
 NTLM HTTP authentication is based on a TCP connection, i.e. the connection is the session (I call it "ConSessions"). In order to exploit this fact here is what NHASTIE does:
 <ol>
 <li> The tool creates a single TCP socket which will be used to transfer all communication to and from the target web application, and stands by (listening) for a victim.</li>
-<li> A victim issues an HTTP request to the tool and the tool forward the HTTP request to the designated web application.</li>
+<li> A victim issues an HTTP request to the tool and the tool forwards the HTTP request to the designated web application.</li>
 <li> The Web application replies with a demand to authenticate using NTLM, the tool forwards the response to the victim.</li>
 <li> The victim automatically responds with a valid NTLM authentication, which is forwarded by the tool the web application by the same TCP socket.</li>
-<li> The web application treat all future incoming HTTP requests from this TCP socket as authenticated by the victim.</li>
+<li> The web application treats all future incoming HTTP requests from this TCP socket as authenticated by the victim.</li>
 <li> The attacker connects to the tool using a browser, and surfs the vulnerable web application using the victim's identity!</li>
 </ol>
 </p>
@@ -33,13 +33,14 @@ NTLM HTTP authentication is based on a TCP connection, i.e. the connection is th
 Yes, and in numerous ways, for example:
 <ol>
 <li> Asking - Be nice :)</li>
-<li> Phishing - Luring users to use a link, open of template based word, etc.</li>
+<li> Phishing - Luring users to use a link HTTP/UNC/SMB</li>
+<li> Open of template based word, a .lnk file or access a share with desktop.ini file</li>
 <li> Using web application attacks - XSS, CSRF, etc.</li>
 <li> Forcing with MITM</li>
 </ol>
 Several instances that will trigger NTLM automatic submission in a Windows environment:
 <ol>
-<li> Browsers automatically sends NTLM when needed to cached web application with Intranet URL and some (e.g. default Internet Explorer) will send it even to none cached intranet sites.</li>
+<li> Browsers automatically send NTLM when needed to cached web application with Intranet URL and some (e.g. default Internet Explorer) will send it even to non-cached intranet sites.</li>
 <li> Use template based word this will trigger SMB communication with  NTLM.</li>
 <li> Use XXE on servers</li>
 <li> Use SQL Injection techniques</li>
@@ -49,11 +50,14 @@ Several instances that will trigger NTLM automatic submission in a Windows envir
 <p>
 <h2>Quick PoC Instructions:</h2>
 <ol>
+<li> Locate a web application which requires NTLM authentication</li>
 <li> Launch NHASTIE with the following command on the attacker's machine:<br>
-java -jar nhastie.jar {}</li>
-<li> Run Internet Explorer from the victim's machine and surf to the attacker's computer http://attacker</li>
-<li> Run a browser from any computer, connect to the attacker's machine, surf using the victim's authenticated channel.</li>
-</ol>
+java -jar -t {Target IP or Hostname} -p {Target Port} -l {listen port} {-ssl optional}</li>
+<li> Lure/Phish/Spoof/Trick/MITM/XSS/CSRF the victims browser to connect to
+NHASTIE server using regular HTTP* (NHASTIE does SSL Stripping)</li>
+<li> Open a browser, connect to NHASTIE, and surf in the web application with the victim's session.</li>
+</ol><br>
+* It is possible to execute to combine this attack with cross protocols
 </p>
 
 <p>
@@ -62,16 +66,31 @@ NHASTIE is developed and maintained by <a href="https://twitter.com/oren1ofer">O
 </p>
 
 <p>
+<h2>Latest Version Changes</h2>
+Version 1.2
+<ol>
+<li>Built in support for SSL: use flag -ssl when needed</li>
+<li>Some bug fixes</li>
+</ol>
+</p>
+
+<p>
 <h2>Copyright</h2>
 </p>
 <p>NHASTIE - NTLM HTTP Authentication Session Tier Exploit.</p>
 
-<p>Copyright (C) 2013, Hacktics ASC, Ernst & Young.</p>
+<p>Copyright (C) 2014, Hacktics ASC, Ernst & Young.</p>
 
-<p>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+<p>Licensed under the Apache License, Version 2.0 (the "License");</p>
+<p>you may not use this file except in compliance with the License.</p>
+<p>You may obtain a copy of the License at</p>
 
-<p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</p>
+<p>http://www.apache.org/licenses/LICENSE-2.0</p>
 
-<p>You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses</a>.</p>
+<p>Unless required by applicable law or agreed to in writing, software</p>
+<p>distributed under the License is distributed on an "AS IS" BASIS,</p>
+<p>WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</p>
+<p>See the License for the specific language governing permissions and</p>
+<p>limitations under the License.</p>
 
 </article>
